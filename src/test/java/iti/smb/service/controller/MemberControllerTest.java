@@ -47,8 +47,6 @@ class MemberControllerTest {
     void addMember() throws Exception {
         Member mockMember = Member.builder().id(1L).name("sangjin").build();
 
-        given(memberService.addMember("sangjin")).willReturn(mockMember);
-
         mvc.perform(post("/member")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"sangjin\"}"))

@@ -20,4 +20,6 @@ public class ThirdCategory {
 
     private String name;
 
+    private Long subCategoryId;
+
 }

@@ -1,9 +1,11 @@
 package iti.smb.service.service;
 
 import iti.smb.service.domain.Member;
+import iti.smb.service.exception.MemberNotFoundException;
 import iti.smb.service.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,13 +25,19 @@ public class MemberService {
     }
 
     // 멤버 추가
-    public Member addMember(String name) {
-        return memberRepository.save(Member.builder().name(name).build());
+    @Transactional
+    public void addMember(String name) {
+        memberRepository.save(Member.builder().name(name).build());
     }
 
     // 멤버 제외
+    @Transactional
     public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+
+        member.setDeleted(true);
+
+        memberRepository.save(member);
     }
 
 }
