@@ -1,5 +1,6 @@
 package iti.smb.service.controller;
 
+import iti.smb.service.domain.MainCategory;
 import iti.smb.service.domain.SubCategory;
 import iti.smb.service.domain.ThirdCategory;
 import iti.smb.service.service.CategoryService;
@@ -22,76 +23,76 @@ public class CategoryController {
 
     // 대분류 목록
     @GetMapping("/main")
-    public List mainCategorylist() {
+    public List<MainCategory> mainCategoryList() {
         return categoryService.mainCategoryList();
     }
 
     // 대분류 추가
     @PostMapping("/main")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addMain(@RequestParam String name) {
+    public void addMainCategory(String name) {
         categoryService.addMain(name);
     }
 
     // 대분류 이름 수정
     @PatchMapping("/main/{id}")
-    public void modifyMainName(@RequestParam String name, @PathVariable("id") Long id) {
-        categoryService.modifyMainName(name, id);
+    public void modifyMainCategoryName(@PathVariable Long id, String name) {
+        categoryService.modifyMainName(id, name);
     }
 
     // 대분류 삭제
     @DeleteMapping("/main/{id}")
-    public void delMain(@PathVariable("id") Long id) {
+    public void deleteMainCategory(@PathVariable Long id) {
         categoryService.delMain(id);
     }
 
     // 중분류 목록
-    @GetMapping("/sub/{mainId}")
-    public List<SubCategory> subCategoryList(@PathVariable("mainId") Long id) {
+    @GetMapping("/main/{main_id}/sub")
+    public List<SubCategory> subCategoryList(@PathVariable("main_id") Long id) {
         return categoryService.subCategoryList(id);
     }
 
     // 중분류 추가
-    @PostMapping("/sub/{mainId}")
+    @PostMapping("/main/{main_id}/sub")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addSub(@RequestParam String name, @PathVariable("mainId") Long id) {
-        categoryService.addSub(name, id);
+    public void addSubCategory(@PathVariable("main_id") Long id, String name) {
+        categoryService.addSub(id, name);
     }
 
     // 중분류 이름 수정
-    @PatchMapping("/sub/{id}")
-    public void modifySubName(@RequestBody String name, @PathVariable("id") Long id) {
-        categoryService.modifySubName(name, id);
+    @PatchMapping("/main/{main_id}/sub/{sub_id}")
+    public void modifySubCategoryName(@PathVariable("sub_id") Long id, String name) {
+        categoryService.modifySubName(id, name);
     }
 
     // 중분류 삭제
-    @DeleteMapping("/sub/{id}")
-    public void delSub(@PathVariable("id") Long id) {
+    @DeleteMapping("/main/{main_id}/sub/{sub_id}")
+    public void deleteSubCategory(@PathVariable("sub_id") Long id) {
         categoryService.delSub(id);
     }
 
     // 소분류 목록
-    @GetMapping("/third/{subId}")
-    public List<ThirdCategory> thirdCategoryList(@PathVariable("subId") Long id) {
+    @GetMapping("/sub/{sub_id}/third")
+    public List<ThirdCategory> thirdCategoryList(@PathVariable("sub_id") Long id) {
         return categoryService.thirdCategoryList(id);
     }
 
     // 소분류 추가
-    @PostMapping("/third/{subId}")
+    @PostMapping("/sub/{sub_id}/third")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addThird(@RequestParam String name, @PathVariable("subId") Long id) {
-        categoryService.addThird(name, id);
+    public void addThirdCategory(@PathVariable("sub_id") Long id, String name) {
+        categoryService.addThird(id, name);
     }
 
     // 소분류 이름 수정
-    @PatchMapping("/third/{id}")
-    public void modifyThirdName(@RequestParam String name, @PathVariable("id") Long id) {
-        categoryService.modifyThirdName(name, id);
+    @PatchMapping("/sub/{sub_id}/third/{third_id}")
+    public void modifyThirdCategoryName(@PathVariable("third_id") Long id, String name) {
+        categoryService.modifyThirdName(id, name);
     }
 
     // 소분류 삭제
-    @DeleteMapping("third/{id}")
-    public void delThird(@PathVariable("id") Long id) {
+    @DeleteMapping("/sub/{sub_id}/third/{third_id}")
+    public void deleteThirdCategory(@PathVariable("third_id") Long id) {
         categoryService.delThird(id);
     }
 

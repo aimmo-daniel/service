@@ -1,17 +1,19 @@
 package iti.smb.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import iti.smb.service.controller.dto.HistoryDto;
+import iti.smb.service.exception.DateException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,87 +22,134 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Where(clause = "deleted = false") //deleted false 인것만 노출
+@Table(name = "history")
 public class History {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // PK
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "history_id", nullable = false, updatable = false)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
-    private Date addDate;
+    // 접수일
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @Column(name = "receive_date")
+    private LocalDate receiveDate;
 
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+    // 종료일
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
-    private Long receiveMember;
+    // 접수자
+    @JsonIgnoreProperties({"name"})
+    @ManyToOne
+    @JoinColumn(name = "receive_member_id")
+    private Member receiveMember;
 
-    private Long workMember;
+    // 작업자
+    @JsonIgnoreProperties({"name"})
+    @ManyToOne
+    @JoinColumn(name = "work_member_id")
+    private Member workMember;
 
+    // 접수내용
+    @Column(name = "reception")
     private String reception;
 
+    // 고장원인
+    @Column(name = "cause")
     private String cause;
 
+    // 조치사항
+    @Column(name = "action")
     private String action;
 
+    // 특이사항
+    @Column(name = "remarks")
     private String remarks;
 
-    private String hospital_code;
+    // FK 병원 (N:1 단방향)
+    @JsonIgnoreProperties({"name, solution, region, link ,homepage, isService"})
+    @ManyToOne
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private Hospital hospital;
 
-    private Long mainCategoryId;
+    // FK 대분류 (N:1 단방향)
+    @ManyToOne
+    @JoinColumn(name = "main_category_id")
+    private MainCategory mainCategory;
 
-    private Long subCategoryId;
+    // FK 중분류 (N:1 단방향)
+    @ManyToOne
+    @JoinColumn(name = "sub_category_id")
+    private SubCategory subCategory;
 
-    private Long thirdCategoryId;
+    // FK 소분류 (N:1 단방향)
+    @ManyToOne
+    @JoinColumn(name = "third_category_id")
+    private ThirdCategory thirdCategory;
 
-    @ColumnDefault("0")
-    private int status;
+    // 접수상태 (default = READY)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ServiceStatus status = ServiceStatus.READY;
 
+    // 단말기 시리얼번호 목록
     @OneToMany
-    @JoinColumn(name = "service_code")
-    private List<Serial> serialList;
+    @JoinColumn(name = "serial_id")
+    private List<Serial> serialList = new ArrayList<Serial>();
 
-    @ColumnDefault("0") // 삭제여부 0 = false
+    // 삭제 여부 (DB 에서는 지워지지 않음)
+    @Column(name = "deleted", columnDefinition = "boolean default false")
     private boolean deleted;
 
-    public void set(HistoryDto historyDto) {
-        if(historyDto.getAddDate() != null) {
-            this.setAddDate(historyDto.getAddDate());
+    public void set(HistoryDto dto) {
+        if(dto.getReceiveDate() != null) {
+            this.setReceiveDate(dto.getReceiveDate());
         }
-        if(historyDto.getEndDate() != null) {
-            this.setEndDate(historyDto.getEndDate());
+        if(dto.getEndDate() != null) {
+            CheckLocalDate(dto.getReceiveDate(), dto.getEndDate());
+            this.setEndDate(dto.getEndDate());
         }
-        if(historyDto.getReceiveMember() != null){
-            this.setReceiveMember(historyDto.getReceiveMember());
+        if(dto.getReceiveMemberId() != null) {
+            this.setReceiveMember(Member.builder().id(dto.getReceiveMemberId()).build());
         }
-        if(historyDto.getWorkMember() != null){
-            this.setWorkMember(historyDto.getWorkMember());
+        if(dto.getWorkMemberId() != null) {
+            this.setWorkMember(Member.builder().id(dto.getWorkMemberId()).build());
         }
-        if(!StringUtils.isEmpty(historyDto.getReception())){
-            this.setReception(historyDto.getReception());
+        if(!StringUtils.isEmpty(dto.getReception())) {
+            this.setReception(dto.getReception());
         }
-        if(!StringUtils.isEmpty(historyDto.getCause())){
-            this.setCause(historyDto.getCause());
+        if(!StringUtils.isEmpty(dto.getCause())) {
+            this.setCause(dto.getCause());
         }
-        if(!StringUtils.isEmpty(historyDto.getAction())){
-            this.setAction(historyDto.getAction());
+        if(!StringUtils.isEmpty(dto.getAction())) {
+            this.setAction(dto.getAction());
         }
-        if(!StringUtils.isEmpty(historyDto.getRemarks())){
-            this.setRemarks(historyDto.getRemarks());
+        if(!StringUtils.isEmpty(dto.getRemarks())) {
+            this.setRemarks(dto.getRemarks());
         }
-        if(!StringUtils.isEmpty(historyDto.getHospital_code())){
-            this.setHospital_code(historyDto.getHospital_code());
+        if(dto.getHospitalId() != null) {
+            this.setHospital(Hospital.builder().id(dto.getHospitalId()).build());
         }
-        if(historyDto.getMainCategoryId() != null){
-            this.setMainCategoryId(historyDto.getMainCategoryId());
+        if(dto.getMainCategoryId() != null) {
+            this.setMainCategory(MainCategory.builder().id(dto.getMainCategoryId()).build());
         }
-        if(historyDto.getSubCategoryId() != null){
-            this.setSubCategoryId(historyDto.getSubCategoryId());
+        if(dto.getSubCategoryId() != null) {
+            this.setSubCategory(SubCategory.builder().id(dto.getSubCategoryId()).build());
         }
-        if(historyDto.getThirdCategoryId() != null){
-            this.setThirdCategoryId(historyDto.getThirdCategoryId());
+        if(dto.getThirdCategoryId() != null) {
+            this.setThirdCategory(ThirdCategory.builder().id(dto.getThirdCategoryId()).build());
         }
-        if(historyDto.getStatus() != null) {
-            this.setStatus(historyDto.getStatus());
+        if(dto.getSerialList() != null) {
+            this.setSerialList(dto.getSerialList());
+        }
+    }
+
+    //날짜 체크
+    public void CheckLocalDate(LocalDate start, LocalDate end) {
+        if(!start.isBefore(end)) {
+            throw new DateException();
         }
     }
 

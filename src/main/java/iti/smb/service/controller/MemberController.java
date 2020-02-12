@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 @RequestMapping("/api/member")
@@ -29,8 +28,8 @@ public class MemberController {
     // 멤버 추가
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addMember(@RequestBody Member resource) throws URISyntaxException {
-        memberService.addMember(resource.getName());
+    public void addMember(String name) {
+        memberService.addMember(name);
     }
 
     // 멤버 제외

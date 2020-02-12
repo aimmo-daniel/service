@@ -35,11 +35,12 @@ public class CategoryService {
 
     @Transactional
     public void addMain(String name) {
-        mainCategoryRepository.save(MainCategory.builder().name(name).build());
+        MainCategory mainCategory = MainCategory.builder().name(name).build();
+        mainCategoryRepository.save(mainCategory);
     }
 
     @Transactional
-    public void modifyMainName(String name, Long id) {
+    public void modifyMainName(Long id, String name) {
         MainCategory mainCategory = mainCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
 
         mainCategory.setName(name);
@@ -57,18 +58,22 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addSub(String name, Long id) {
+    public void addSub(Long id, String name) {
+        MainCategory mainCategory = mainCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+
         SubCategory subCategory = SubCategory.builder()
                 .name(name)
-                .mainCategoryId(id)
+                .mainCategory(mainCategory)
                 .build();
+
         subCategoryRepository.save(subCategory);
     }
 
     @Transactional
-    public void modifySubName(String name, Long id) {
+    public void modifySubName(Long id, String name) {
         SubCategory subCategory = subCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
         subCategory.setName(name);
+
         subCategoryRepository.save(subCategory);
     }
 
@@ -82,18 +87,22 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addThird(String name, Long id) {
+    public void addThird(Long id, String name) {
+        SubCategory subCategory = subCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+
         ThirdCategory thirdCategory = ThirdCategory.builder()
                 .name(name)
-                .subCategoryId(id)
+                .subCategory(subCategory)
                 .build();
+
         thirdCategoryRepository.save(thirdCategory);
     }
 
     @Transactional
-    public void modifyThirdName(String name, Long id) {
+    public void modifyThirdName(Long id, String name) {
         ThirdCategory thirdCategory = thirdCategoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
         thirdCategory.setName(name);
+
         thirdCategoryRepository.save(thirdCategory);
     }
 

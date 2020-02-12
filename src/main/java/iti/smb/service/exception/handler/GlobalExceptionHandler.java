@@ -1,9 +1,6 @@
 package iti.smb.service.exception.handler;
 
-import iti.smb.service.exception.CategoryNotFoundException;
-import iti.smb.service.exception.HistoryNotFoundException;
-import iti.smb.service.exception.MemberNotFoundException;
-import iti.smb.service.exception.SerialNotFoundException;
+import iti.smb.service.exception.*;
 import iti.smb.service.exception.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,6 +28,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HistoryNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleHistoryNotFoundException(HistoryNotFoundException ex) {
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(HospitalNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleHospitalNotFoundException(HospitalNotFoundException ex) {
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 

@@ -1,11 +1,15 @@
 package iti.smb.service.controller.dto;
 
+import iti.smb.service.domain.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Builder
 @AllArgsConstructor(staticName = "of")
@@ -13,13 +17,13 @@ import java.util.Date;
 @Data
 public class HistoryDto {
 
-    private Date addDate;
+    private LocalDate receiveDate;
 
-    private Date endDate;
+    private LocalDate endDate;
 
-    private Long receiveMember;
+    private Long receiveMemberId;
 
-    private Long workMember;
+    private Long workMemberId;
 
     private String reception;
 
@@ -29,7 +33,7 @@ public class HistoryDto {
 
     private String remarks;
 
-    private String hospital_code;
+    private Long hospitalId;
 
     private Long mainCategoryId;
 
@@ -37,6 +41,6 @@ public class HistoryDto {
 
     private Long thirdCategoryId;
 
-    private Integer status;
+    private List<Serial> serialList = new ArrayList<Serial>();
 
 }

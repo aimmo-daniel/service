@@ -1,5 +1,7 @@
 package iti.smb.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +14,22 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Table(name = "third_category")
 public class ThirdCategory {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // PK
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "third_category_id", nullable = false, updatable = false)
     private Long id;
 
+    // 서드 카테고리명
+    @Column(name = "third_category_name", nullable = false)
     private String name;
 
-    private Long subCategoryId;
+    // FK 서브 카테고리 (N:1 단방향)
+    @JsonIgnoreProperties({"name"})
+    @ManyToOne
+    @JoinColumn(name = "sub_category_id", nullable = false)
+    private SubCategory subCategory;
 
 }

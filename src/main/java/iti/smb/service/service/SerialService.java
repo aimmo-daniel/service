@@ -35,11 +35,11 @@ public class SerialService {
     public void modifySerial(Long service_code, Long serialId, String serialNumber) {
         Serial serial = serialRepository.findById(serialId).orElseThrow(SerialNotFoundException::new);
 
-        if(serial.getService_code() == service_code) {
+     /*   if(serial.getHistory().getId() == service_code) {
             serial.setSerialNumber(serialNumber);
         } else {
             throw new RuntimeException();
-        }
+        }*/
 
         serialRepository.save(serial);
     }
@@ -48,11 +48,11 @@ public class SerialService {
     public void delSerial(Long service_code, Long serialId) {
         Serial serial = serialRepository.findById(serialId).orElseThrow(SerialNotFoundException::new);
 
-        if(serial.getService_code() == service_code) {
+       /* if(serial.getHistory().getId() == service_code) {
             serial.setDeleted(true);
         } else {
             throw new RuntimeException();
-        }
+        }*/
 
         serialRepository.save(serial);
     }

@@ -27,14 +27,14 @@ public class MemberService {
     // 멤버 추가
     @Transactional
     public void addMember(String name) {
-        memberRepository.save(Member.builder().name(name).build());
+        Member member = Member.builder().name(name).build();
+        memberRepository.save(member);
     }
 
     // 멤버 제외
     @Transactional
     public void deleteMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
-
         member.setDeleted(true);
 
         memberRepository.save(member);

@@ -56,7 +56,7 @@ class MemberServiceTest {
 
         given(memberRepository.save(any())).willReturn(mockMember);
 
-        memberService.addMember(name);
+
 
         verify(memberRepository).save(any());
     }

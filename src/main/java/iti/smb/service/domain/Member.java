@@ -13,20 +13,20 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Data
 @Where(clause = "deleted = false") //deleted false 인것만 노출
+@Table(name = "member")
 public class Member {
 
-    // 시퀀스
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // PK
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "member_id", nullable = false, updatable = false)
     private Long id;
 
     // 멤버 이름
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
+    @Column(name = "member_name", nullable = false)
     private String name;
 
-    @ColumnDefault("0") // 삭제여부 0 = false
+    // 삭제여부
+    @Column(name = "deleted", columnDefinition = "boolean default false")
     private boolean deleted;
 
 }

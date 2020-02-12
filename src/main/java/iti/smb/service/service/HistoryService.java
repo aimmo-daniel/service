@@ -24,6 +24,7 @@ public class HistoryService {
         return historyRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public History detail(Long id) {
         return historyRepository.findById(id).orElseThrow(HistoryNotFoundException::new);
     }
@@ -39,7 +40,6 @@ public class HistoryService {
     @Transactional
     public void modifyHistory(Long id, HistoryDto historyDto) {
         History history = historyRepository.findById(id).orElseThrow(HistoryNotFoundException::new);
-
         history.set(historyDto);
 
         historyRepository.save(history);
@@ -48,7 +48,6 @@ public class HistoryService {
     @Transactional
     public void delHistory(Long id) {
         History history = historyRepository.findById(id).orElseThrow(HistoryNotFoundException::new);
-
         history.setDeleted(true);
 
         historyRepository.save(history);

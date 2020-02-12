@@ -1,6 +1,7 @@
 package iti.smb.service.controller;
 
 import iti.smb.service.domain.Member;
+import iti.smb.service.domain.dto.FormatDate;
 import iti.smb.service.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.Temporal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +55,6 @@ class MemberControllerTest {
                 .content("{\"name\":\"sangjin\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", "/member"));
-
-        verify(memberService).addMember(eq("sangjin"));
     }
 
     @Test
@@ -62,6 +63,12 @@ class MemberControllerTest {
                 .andExpect(status().isOk());
 
         verify(memberService).deleteMember(1L);
+    }
+
+    @Test
+    void testDate() throws Exception {
+        LocalDate start = LocalDate.of(1991, 2, 31);
+        //FormatDate ss = FormatDate.of(start);
     }
 
 
