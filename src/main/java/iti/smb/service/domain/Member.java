@@ -1,11 +1,13 @@
 package iti.smb.service.domain;
 
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Builder
@@ -26,6 +28,7 @@ public class Member {
     private String name;
 
     // 삭제여부
+    @JsonIgnore
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private boolean deleted;
 

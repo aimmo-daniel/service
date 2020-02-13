@@ -1,7 +1,5 @@
 package iti.smb.service.controller;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import iti.smb.service.controller.dto.HospitalDto;
 import iti.smb.service.domain.Hospital;
 import iti.smb.service.service.HospitalService;

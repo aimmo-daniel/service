@@ -1,7 +1,6 @@
 package iti.smb.service.controller;
 
 import iti.smb.service.domain.Member;
-import iti.smb.service.domain.dto.FormatDate;
 import iti.smb.service.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.Temporal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -70,6 +67,5 @@ class MemberControllerTest {
         LocalDate start = LocalDate.of(1991, 2, 31);
         //FormatDate ss = FormatDate.of(start);
     }
-
 
 }

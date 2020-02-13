@@ -1,7 +1,9 @@
 package iti.smb.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import iti.smb.service.controller.dto.HistoryDto;
 import iti.smb.service.exception.DateException;
 import lombok.AllArgsConstructor;
@@ -13,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,7 @@ import java.util.List;
 @Data
 @Where(clause = "deleted = false") //deleted false 인것만 노출
 @Table(name = "history")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class History {
 
     // PK
@@ -31,23 +33,23 @@ public class History {
     private Long id;
 
     // 접수일
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "receive_date")
     private LocalDate receiveDate;
 
     // 종료일
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "end_date")
     private LocalDate endDate;
 
     // 접수자
-    @JsonIgnoreProperties({"name"})
+    @JsonIgnoreProperties({"id", "deleted"})
     @ManyToOne
     @JoinColumn(name = "receive_member_id")
     private Member receiveMember;
 
     // 작업자
-    @JsonIgnoreProperties({"name"})
+    @JsonIgnoreProperties({"id", "deleted"})
     @ManyToOne
     @JoinColumn(name = "work_member_id")
     private Member workMember;
@@ -69,22 +71,25 @@ public class History {
     private String remarks;
 
     // FK 병원 (N:1 단방향)
-    @JsonIgnoreProperties({"name, solution, region, link ,homepage, isService"})
+    @JsonIgnoreProperties({"id", "name", "solution", "region", "link", "homepage"})
     @ManyToOne
     @JoinColumn(name = "hospital_id", nullable = false)
     private Hospital hospital;
 
     // FK 대분류 (N:1 단방향)
+    @JsonIgnoreProperties({"id"})
     @ManyToOne
     @JoinColumn(name = "main_category_id")
     private MainCategory mainCategory;
 
     // FK 중분류 (N:1 단방향)
+    @JsonIgnoreProperties({"id", "mainCategory"})
     @ManyToOne
     @JoinColumn(name = "sub_category_id")
     private SubCategory subCategory;
 
     // FK 소분류 (N:1 단방향)
+    @JsonIgnoreProperties({"id", "subCategory"})
     @ManyToOne
     @JoinColumn(name = "third_category_id")
     private ThirdCategory thirdCategory;
@@ -94,10 +99,11 @@ public class History {
     @Column(name = "status")
     private ServiceStatus status = ServiceStatus.READY;
 
+    // LAZY : 지연로딩, EAGER : 즉시로딩딩
     // 단말기 시리얼번호 목록
-    @OneToMany
-    @JoinColumn(name = "serial_id")
-    private List<Serial> serialList = new ArrayList<Serial>();
+    @JsonIgnoreProperties({"id", "history"})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "history")
+    private List<HistorySerial> historySerialList;
 
     // 삭제 여부 (DB 에서는 지워지지 않음)
     @Column(name = "deleted", columnDefinition = "boolean default false")
@@ -141,8 +147,8 @@ public class History {
         if(dto.getThirdCategoryId() != null) {
             this.setThirdCategory(ThirdCategory.builder().id(dto.getThirdCategoryId()).build());
         }
-        if(dto.getSerialList() != null) {
-            this.setSerialList(dto.getSerialList());
+        if(dto.getHistorySerialList() != null) {
+            this.setHistorySerialList(dto.getHistorySerialList());
         }
     }
 

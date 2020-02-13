@@ -41,6 +41,6 @@ public class HistoryDto {
 
     private Long thirdCategoryId;
 
-    private List<Serial> serialList = new ArrayList<Serial>();
+    private List<HistorySerial> historySerialList = new ArrayList<HistorySerial>();
 
 }

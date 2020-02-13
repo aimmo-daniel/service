@@ -1,5 +1,8 @@
 package iti.smb.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import iti.smb.service.controller.dto.HospitalDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +18,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Builder
-@Where(clause = "isService = true") //deleted false 인것만 노출
+@Where(clause = "service = true") //service true 인것만 노출
 @Table(name = "hospital")
 public class Hospital {
 
@@ -49,8 +52,9 @@ public class Hospital {
     private String homepage;
 
     // 서비스 현황(false 면 목록에 표시하지않음)
-    @Column(name = "isService", columnDefinition = "boolean default true")
-    private boolean isService;
+    @JsonIgnore
+    @Column(name = "service", columnDefinition = "boolean default true")
+    private boolean service;
 
     public void set(HospitalDto dto) {
         if(!StringUtils.isEmpty(dto.getCode())) {

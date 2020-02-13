@@ -1,6 +1,8 @@
 package iti.smb.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +28,7 @@ public class SubCategory {
     private String name;
 
     // FK 메인 카테고리 (N:1 단방향)
-    @JsonIgnoreProperties({"main_category_name"})
+    @JsonIgnoreProperties({"name"})
     @ManyToOne
     @JoinColumn(name = "main_category_id", nullable = false)
     private MainCategory mainCategory;
