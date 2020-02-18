@@ -1,5 +1,6 @@
 package iti.smb.service.model.network.request;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import iti.smb.service.model.enumclass.ServiceStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,8 +41,8 @@ public class HistoryReq {
 
     private Long thirdCategoryId;
 
-    private ServiceStatus status;
+    private ServiceStatus status = ServiceStatus.대기중;
 
-    private Long deleted;
+    private Boolean deleted=false;
 
 }

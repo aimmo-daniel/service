@@ -37,15 +37,15 @@ class ThirdCategoryRepositoryTest {
 
         ThirdCategory thirdCategory = new ThirdCategory();
         thirdCategory.setName("소분류1");
-        thirdCategory.setSubCategory(subCategory);
+        //thirdCategory.setSubCategory(subCategory);
 
         ThirdCategory newThirdCategory = thirdCategoryRepository.save(thirdCategory);
 
         assertThat(newThirdCategory).isNotNull();
 
         assertThat(newThirdCategory.getName()).isEqualTo("소분류1");
-        assertThat(newThirdCategory.getSubCategory().getName()).isEqualTo("중분류1");
-        assertThat(newThirdCategory.getSubCategory().getMainCategory().getName()).isEqualTo("대분류1");
+        //assertThat(newThirdCategory.getSubCategory().getName()).isEqualTo("중분류1");
+        //assertThat(newThirdCategory.getSubCategory().getMainCategory().getName()).isEqualTo("대분류1");
     }
 
     @Transactional

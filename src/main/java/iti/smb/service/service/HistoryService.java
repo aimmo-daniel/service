@@ -2,7 +2,10 @@ package iti.smb.service.service;
 
 import iti.smb.service.exception.HistoryNotFoundException;
 import iti.smb.service.interfaces.CrudInterface;
-import iti.smb.service.model.entity.*;
+import iti.smb.service.model.entity.History;
+import iti.smb.service.model.entity.MainCategory;
+import iti.smb.service.model.entity.SubCategory;
+import iti.smb.service.model.entity.ThirdCategory;
 import iti.smb.service.model.network.Header;
 import iti.smb.service.model.network.request.HistoryReq;
 import iti.smb.service.model.network.response.HistoryRes;
@@ -12,13 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static jdk.nashorn.internal.objects.NativeMath.log;
-import static jdk.nashorn.internal.runtime.ScriptObject.setGlobalObjectProto;
 
 @Slf4j
 @Service
@@ -59,7 +57,7 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
 
         if(!StringUtils.isEmpty(req.getReceiveMemberId())) history.setReceiveMember(memberRepository.getOne(req.getReceiveMemberId()));
         if(!StringUtils.isEmpty(req.getWorkMemberId())) history.setWorkMember(memberRepository.getOne(req.getWorkMemberId()));
-        if(!StringUtils.isEmpty(req.getMainCategoryId())) history.setMainCategory(mainCategoryRepository.getOne(req.getMainCategoryId()));
+        //if(!StringUtils.isEmpty(req.getMainCategoryId())) history.setMainCategory(mainCategoryRepository.getOne(req.getMainCategoryId()));
         if(!StringUtils.isEmpty(req.getSubCategoryId())) history.setSubCategory(subCategoryRepository.getOne(req.getSubCategoryId()));
         if(!StringUtils.isEmpty(req.getThirdCategoryId())) history.setThirdCategory(thirdCategoryRepository.getOne(req.getThirdCategoryId()));
 

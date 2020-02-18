@@ -36,14 +36,14 @@ class SubCategoryRepositoryTest {
         MainCategory mainCategory = mainCategoryRepository.findById(1L).orElse(null);
         SubCategory subCategory = new SubCategory();
         subCategory.setName("중분류1");
-        subCategory.setMainCategory(mainCategory);
+        //subCategory.setMainCategory(mainCategory);
 
         SubCategory newSubCategory = subCategoryRepository.save(subCategory);
 
         assertThat(newSubCategory).isNotNull();
 
         assertThat(newSubCategory.getName()).isEqualTo("중분류1");
-        assertThat(newSubCategory.getMainCategory().getName()).isEqualTo("대분류1");
+        //assertThat(newSubCategory.getMainCategory().getName()).isEqualTo("대분류1");
     }
 
     @Transactional
@@ -51,17 +51,17 @@ class SubCategoryRepositoryTest {
     public void modify() {
         SubCategory subCategory = subCategoryRepository.findById(1L).orElse(null);
         assertThat(subCategory.getName()).isEqualTo("중분류1");
-        assertThat(subCategory.getMainCategory().getId()).isEqualTo(1L);
+        //assertThat(subCategory.getMainCategory().getId()).isEqualTo(1L);
 
         subCategory.setName("중분류2");
 
         MainCategory mainCategory = mainCategoryRepository.findById(1L).orElse(null);
-        subCategory.setMainCategory(mainCategory);
+        //subCategory.setMainCategory(mainCategory);
 
         subCategoryRepository.save(subCategory);
 
         assertThat(subCategory.getName()).isEqualTo("중분류2");
-        assertThat(subCategory.getMainCategory().getName()).isEqualTo("대분류1");
+        //assertThat(subCategory.getMainCategory().getName()).isEqualTo("대분류1");
     }
 
     @Transactional

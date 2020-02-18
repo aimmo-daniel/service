@@ -88,7 +88,7 @@ public class History {
 
     // 진행상태 (default = READY)
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, columnDefinition = "varchar default `대기중`")
+    @Column(name = "status", nullable = false, columnDefinition = "varchar(255) default '대기중'")
     private ServiceStatus status = ServiceStatus.대기중;
 
     // History 1 : N HistorySerial

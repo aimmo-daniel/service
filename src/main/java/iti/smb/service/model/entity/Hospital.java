@@ -35,11 +35,11 @@ public class Hospital {
     private String region;
 
     // 솔루션
-    @Column(name = "solution", columnDefinition = "boolean default false")
+    @Column(name = "solution", nullable = false)
     private boolean solution;
 
     // 진료정보연동
-    @Column(name = "link", columnDefinition = "boolean default false")
+    @Column(name = "link", nullable = false)
     private boolean link;
 
     // 홈페이지

@@ -25,6 +25,6 @@ public class HospitalReq {
 
     private String homepage;
 
-    private Boolean endService;
+    private Boolean endService=false;
 
 }

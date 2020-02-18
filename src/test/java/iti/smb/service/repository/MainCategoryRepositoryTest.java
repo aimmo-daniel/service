@@ -1,6 +1,7 @@
 package iti.smb.service.repository;
 
 import iti.smb.service.model.entity.MainCategory;
+import iti.smb.service.model.entity.ThirdCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,14 @@ class MainCategoryRepositoryTest {
     @Autowired
     private MainCategoryRepository mainCategoryRepository;
 
+    @Autowired
+    private ThirdCategoryRepository thirdCategoryRepository;
+
+    @Transactional
     @Test
     public void list() {
-        List<MainCategory> categoryList = mainCategoryRepository.findAll();
-        assertThat(categoryList.size()).isEqualTo(2);
-        log.info("mainCategoryList : ", categoryList);
+        //List<MainCategory> categoryList = mainCategoryRepository.findAll();
+        //System.out.println(categoryList);
     }
 
     @Test

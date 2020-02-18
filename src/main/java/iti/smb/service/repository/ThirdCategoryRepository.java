@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface ThirdCategoryRepository extends JpaRepository<ThirdCategory, Long> {
 
-    List<ThirdCategory> findBySubCategoryId(Long subCategoryId);
-
 }

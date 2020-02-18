@@ -18,6 +18,6 @@ public class MemberReq {
 
     private JobPosition jobPosition;
 
-    private Boolean deleted;
+    private Boolean deleted=false;
 
 }
