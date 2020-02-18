@@ -1,8 +1,8 @@
 package iti.smb.service.service;
 
-import iti.smb.service.domain.MainCategory;
-import iti.smb.service.domain.SubCategory;
-import iti.smb.service.domain.ThirdCategory;
+import iti.smb.service.model.entity.MainCategory;
+import iti.smb.service.model.entity.SubCategory;
+import iti.smb.service.model.entity.ThirdCategory;
 import iti.smb.service.exception.CategoryNotFoundException;
 import iti.smb.service.repository.MainCategoryRepository;
 import iti.smb.service.repository.SubCategoryRepository;

@@ -1,11 +1,11 @@
-package iti.smb.service.domain;
+package iti.smb.service.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import iti.smb.service.model.enumclass.JobPosition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -14,18 +14,23 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Where(clause = "deleted = false") //deleted false 인것만 노출
 @Table(name = "member")
 public class Member {
 
     // PK
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false, updatable = false)
     private Long id;
 
     // 멤버 이름
-    @Column(name = "member_name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
+
+    // 직급
+    @Enumerated(EnumType.STRING)
+    @Column(name = "job_position", nullable = false)
+    private JobPosition jobPosition;
 
     // 삭제여부
     @JsonIgnore

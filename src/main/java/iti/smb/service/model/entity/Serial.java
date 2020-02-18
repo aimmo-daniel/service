@@ -1,13 +1,6 @@
-package iti.smb.service.domain;
+package iti.smb.service.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,10 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Table(name = "serial")
+@ToString(exclude = {"historySerialList"})
 public class Serial {
 
     // PK
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "serial_id", nullable = false, updatable = false)
     private Long id;
 
@@ -29,13 +24,13 @@ public class Serial {
     @Column(name = "serial_number", unique = true, nullable = false)
     private String serialNumber;
 
+    // Serial N : 1 Hospital
     // 병원 정보
-    @JsonIgnoreProperties({"id", "name", "solution", "region", "link", "homepage"})
     @ManyToOne
     @JoinColumn(name = "hospital_id", nullable = false)
     private Hospital hospital;
 
-    @JsonIgnore
+    // Serial 1 : N HistorySerial
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "serial")
     private List<HistorySerial> historySerialList;
 

@@ -1,6 +1,6 @@
 package iti.smb.service.service;
 
-import iti.smb.service.domain.Member;
+import iti.smb.service.model.entity.Member;
 import iti.smb.service.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,11 +40,6 @@ class MemberServiceTest {
 
         given(memberRepository.findAll()).willReturn(mockMembers);
 
-        List<Member> members = memberService.getMembers();
-
-        Member member = members.get(0);
-
-        assertThat(member.getName()).isEqualTo("sangjin");
     }
 
     @Test
@@ -65,7 +60,7 @@ class MemberServiceTest {
     void deleteMember() {
         Long id = 1L;
 
-        memberService.deleteMember(id);
+        memberService.delete(id);
 
         verify(memberRepository).deleteById(any());
     }

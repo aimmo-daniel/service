@@ -1,7 +1,7 @@
 package iti.smb.service.service;
 
-import iti.smb.service.domain.History;
-import iti.smb.service.domain.Serial;
+import iti.smb.service.model.entity.History;
+import iti.smb.service.model.entity.Serial;
 import iti.smb.service.exception.HistoryNotFoundException;
 import iti.smb.service.exception.SerialNotFoundException;
 import iti.smb.service.repository.HistoryRepository;

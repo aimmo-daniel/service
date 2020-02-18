@@ -1,8 +1,8 @@
 package iti.smb.service.controller;
 
-import iti.smb.service.domain.MainCategory;
-import iti.smb.service.domain.SubCategory;
-import iti.smb.service.domain.ThirdCategory;
+import iti.smb.service.model.entity.MainCategory;
+import iti.smb.service.model.entity.SubCategory;
+import iti.smb.service.model.entity.ThirdCategory;
 import iti.smb.service.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package iti.smb.service.controller;
 
-import iti.smb.service.domain.Member;
+import iti.smb.service.model.entity.Member;
 import iti.smb.service.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ class MemberControllerTest {
         List<Member> members = new ArrayList<>();
         members.add(Member.builder().id(1L).name("sangjin").build());
 
-        given(memberService.getMembers()).willReturn(members);
+        given(memberService.list());
 
         mvc.perform(get(("/member")))
                 .andDo(print())
@@ -59,7 +59,7 @@ class MemberControllerTest {
         mvc.perform(delete("/member/1"))
                 .andExpect(status().isOk());
 
-        verify(memberService).deleteMember(1L);
+        verify(memberService).delete(1L);
     }
 
     @Test

@@ -1,55 +1,62 @@
 package iti.smb.service.controller;
 
-import iti.smb.service.controller.dto.HistoryDto;
-import iti.smb.service.domain.History;
+import iti.smb.service.interfaces.CrudInterface;
+import iti.smb.service.model.network.Header;
+import iti.smb.service.model.network.request.HistoryReq;
+import iti.smb.service.model.network.response.HistoryRes;
 import iti.smb.service.service.HistoryService;
 import iti.smb.service.service.SerialService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/api/history")
 @RestController
-public class HistoryController {
+public class HistoryController implements CrudInterface<HistoryReq, HistoryRes, Long> {
 
-    private HistoryService historyService;
-    private SerialService serialService;
+    private final HistoryService historyService;
 
     @Autowired
     public HistoryController(HistoryService historyService, SerialService serialService) {
         this.historyService = historyService;
-        this.serialService = serialService;
     }
 
-    // 서비스 목록 조회
+    // 신규 서비스 히스토리 추가
+    @Override
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Header<HistoryRes> create(@RequestBody HistoryReq request) {
+        return historyService.create(request);
+    }
+
+    // 서비스 히스토리 목록 조회
+    @Override
     @GetMapping
-    public List<History> historyList() {
+    public Header<List<HistoryRes>> list() {
         return historyService.list();
     }
 
-    // 서비스 상세 보기
+    // 서비스 히스토리 상세 조회
+    @Override
     @GetMapping("/{id}")
-    public History historyInfo(@PathVariable Long id) {
-        return historyService.detail(id);
-    }
-
-    // 서비스 히스토리 등록
-    @PostMapping
-    public void addHistory(@RequestBody HistoryDto historyDto) {
-        historyService.addHistory(historyDto);
+    public Header<HistoryRes> read(@PathVariable("id") Long id) {
+        return historyService.read(id);
     }
 
     // 서비스 히스토리 수정
-    @PatchMapping("/{id}")
-    public void modifyHistory(@PathVariable Long id, HistoryDto historyDto) {
-        historyService.modifyHistory(id, historyDto);
+    @Override
+    @PatchMapping
+    public Header<HistoryRes> update(@RequestBody HistoryReq request) {
+        return historyService.update(request);
     }
 
     // 서비스 히스토리 삭제
+    @Override
     @DeleteMapping("/{id}")
-    public void deleteHistory(@PathVariable Long id) {
-        historyService.delHistory(id);
+    public Header delete(@PathVariable("id") Long id) {
+        return historyService.delete(id);
     }
 
 }

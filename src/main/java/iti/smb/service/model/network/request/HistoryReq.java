@@ -1,25 +1,24 @@
-package iti.smb.service.controller.dto;
+package iti.smb.service.model.network.request;
 
-import iti.smb.service.domain.*;
+import iti.smb.service.model.enumclass.ServiceStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
-
-@Builder
-@AllArgsConstructor(staticName = "of")
-@NoArgsConstructor
 @Data
-public class HistoryDto {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class HistoryReq {
 
-    private LocalDate receiveDate;
+    private Long id;
 
-    private LocalDate endDate;
+    private LocalDateTime receiveDate;
+
+    private LocalDateTime endDate;
 
     private Long receiveMemberId;
 
@@ -41,6 +40,8 @@ public class HistoryDto {
 
     private Long thirdCategoryId;
 
-    private List<HistorySerial> historySerialList = new ArrayList<HistorySerial>();
+    private ServiceStatus status;
+
+    private Long deleted;
 
 }

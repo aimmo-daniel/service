@@ -1,6 +1,9 @@
 package iti.smb.service.controller;
 
-import iti.smb.service.domain.Member;
+import iti.smb.service.model.network.Header;
+import iti.smb.service.model.network.request.MemberReq;
+import iti.smb.service.model.network.response.MemberRes;
+import iti.smb.service.interfaces.CrudInterface;
 import iti.smb.service.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +13,7 @@ import java.util.List;
 
 @RequestMapping("/api/member")
 @RestController
-public class MemberController {
+public class MemberController implements CrudInterface<MemberReq, MemberRes, Long> {
 
     private MemberService memberService;
 
@@ -19,23 +22,40 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    // 멤버 목록
-    @GetMapping
-    public List<Member> list() {
-        return memberService.getMembers();
-    }
-
     // 멤버 추가
-    @PostMapping
+    @Override
     @ResponseStatus(HttpStatus.CREATED)
-    public void addMember(String name) {
-        memberService.addMember(name);
+    @PostMapping
+    public Header<MemberRes> create(@RequestBody MemberReq request) {
+        System.out.println(request);
+        return memberService.create(request);
     }
 
-    // 멤버 제외
+    // 멤버 목록
+    @Override
+    @GetMapping
+    public Header<List<MemberRes>> list() {
+        return memberService.list();
+    }
+
+    // 멤버 상세정보 조회
+    @Override
+    @GetMapping("/{id}")
+    public Header<MemberRes> read(@PathVariable("id") Long id) {
+        return memberService.read(id);
+    }
+
+    // 멤버 정보 수정
+    @Override
+    @PatchMapping
+    public Header<MemberRes> update(@RequestBody MemberReq request) {
+        return memberService.update(request);
+    }
+
+    // 멤버 삭제
+    @Override
     @DeleteMapping("/{id}")
-    public void deleteMember(@PathVariable("id") Long id) {
-        memberService.deleteMember(id);
+    public Header delete(@PathVariable("id") Long id) {
+        return memberService.delete(id);
     }
-
 }

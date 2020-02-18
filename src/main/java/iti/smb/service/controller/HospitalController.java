@@ -1,7 +1,9 @@
 package iti.smb.service.controller;
 
-import iti.smb.service.controller.dto.HospitalDto;
-import iti.smb.service.domain.Hospital;
+import iti.smb.service.interfaces.CrudInterface;
+import iti.smb.service.model.network.Header;
+import iti.smb.service.model.network.request.HospitalReq;
+import iti.smb.service.model.network.response.HospitalRes;
 import iti.smb.service.service.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,44 +13,49 @@ import java.util.List;
 
 @RequestMapping("/api/hospital")
 @RestController
-public class HospitalController {
+public class HospitalController implements CrudInterface<HospitalReq, HospitalRes, String> {
 
-    private HospitalService hospitalService;
+    private final HospitalService hospitalService;
 
     @Autowired
     public HospitalController(HospitalService hospitalService) {
         this.hospitalService = hospitalService;
     }
 
-    // 병원목록 조회
+    // 신규 병원 추가
+    @Override
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Header<HospitalRes> create(@RequestBody HospitalReq request) {
+        return hospitalService.create(request);
+    }
+
+    // 병원 목록 조회
+    @Override
     @GetMapping
-    public List<Hospital> hospitalList() {
-        return hospitalService.hospitalList();
+    public Header<List<HospitalRes>> list() {
+        return hospitalService.list();
     }
 
     // 병원 상세정보 조회
-    @GetMapping("/{id}")
-    public Hospital hospitalInfo(@PathVariable("id") Long id) {
-        return hospitalService.hospitalInfo(id);
+    @Override
+    @GetMapping("/{code}")
+    public Header<HospitalRes> read(@PathVariable("code") String code) {
+        return hospitalService.read(code);
     }
 
-    // 신규병원 추가
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addHospitalInfo(@RequestBody HospitalDto hospitalDto) {
-        hospitalService.addHospital(hospitalDto);
+    // 병원 정보 수정
+    @Override
+    @PatchMapping
+    public Header<HospitalRes> update(@RequestBody HospitalReq request) {
+        return hospitalService.update(request);
     }
 
-    // 병원정보 수정
-    @PatchMapping("/{id}")
-    public void modifyHospitalInfo(@PathVariable("id") Long id, HospitalDto hospitalDto) {
-        hospitalService.modifyHospital(id, hospitalDto);
-    }
-
-    // 병원 계약 종료
+    // 병원 서비스 종료
+    @Override
     @DeleteMapping("/{id}")
-    public void deleteHospital(@PathVariable("id") Long id) {
-        hospitalService.delHoispital(id);
+    public Header delete(@PathVariable("id") Long id) {
+        return hospitalService.delete(id);
     }
 
 }

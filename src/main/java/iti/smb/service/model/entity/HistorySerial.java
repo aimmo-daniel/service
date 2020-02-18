@@ -1,10 +1,6 @@
-package iti.smb.service.domain;
+package iti.smb.service.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,17 +9,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Builder
+@ToString(exclude = {"history", "serial"})
 public class HistorySerial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // HistorySerial N : 1 History
     @ManyToOne
     @JoinColumn(name = "history_id")
     private History history;
 
-    @JsonIgnoreProperties({"id", "hospital"})
+    // HistorySerial N : 1 Serial
     @ManyToOne
     @JoinColumn(name = "serial_id")
     private Serial serial;

@@ -1,7 +1,5 @@
-package iti.smb.service.domain;
+package iti.smb.service.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,12 +16,13 @@ import javax.persistence.*;
 public class MainCategory {
 
     // PK
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "main_category_id", nullable = false, updatable = false)
     private Long id;
 
     // 메인 카테고리명
-    @Column(name = "main_category_name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
 }
