@@ -62,10 +62,9 @@ public class MemberService implements CrudInterface<MemberReq, MemberRes, Long> 
                     if(!StringUtils.isEmpty(req.getName())) member.setName(req.getName());
                     if(!StringUtils.isEmpty(req.getJobPosition())) member.setJobPosition(req.getJobPosition());
 
-                    return member;
+                    memberRepository.save(member);
+                    return Header.OK(response(member));
                 })
-                .map(newMember -> memberRepository.save(newMember))
-                .map(updateMember -> Header.OK(response(updateMember)))
                 .orElseThrow(MemberNotFoundException::new);
     }
 
@@ -75,7 +74,7 @@ public class MemberService implements CrudInterface<MemberReq, MemberRes, Long> 
                 .map(member -> {
                     member.setDeleted(true);
                     memberRepository.save(member);
-                    return Header.OK();
+                    return Header.DELETE();
                 })
                 .orElseThrow(MemberNotFoundException::new);
     }

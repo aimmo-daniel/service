@@ -25,6 +25,12 @@ public class GlobalExceptionHandler {
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleProductNotFoundException(ProductNotFoundException ex) {
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(HistoryNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleHistoryNotFoundException(HistoryNotFoundException ex) {

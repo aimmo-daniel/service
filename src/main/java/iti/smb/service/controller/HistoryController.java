@@ -5,7 +5,6 @@ import iti.smb.service.model.network.Header;
 import iti.smb.service.model.network.request.HistoryReq;
 import iti.smb.service.model.network.response.HistoryRes;
 import iti.smb.service.service.HistoryService;
-import iti.smb.service.service.SerialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class HistoryController implements CrudInterface<HistoryReq, HistoryRes, 
     private final HistoryService historyService;
 
     @Autowired
-    public HistoryController(HistoryService historyService, SerialService serialService) {
+    public HistoryController(HistoryService historyService) {
         this.historyService = historyService;
     }
 

@@ -2,11 +2,14 @@ package iti.smb.service.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import iti.smb.service.model.enumclass.ServiceStatus;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Table(name = "history")
-@ToString(exclude = {"historySerialList"})
+@ToString(exclude = {"historyDeviceList"})
 public class History {
 
     // PK
@@ -37,7 +40,7 @@ public class History {
     // History N : 1 Member
     // 접수자
     @ManyToOne
-    @JoinColumn(name = "receive_member_id")
+    @JoinColumn(name = "receive_member_id", nullable = false)
     private Member receiveMember;
 
     // History N : 1 Member
@@ -63,42 +66,35 @@ public class History {
     private String remarks;
 
     // History N : 1 Hospital
-    // 병원
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    // 병원 정보
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hospital_id", nullable = false)
     private Hospital hospital;
 
-    // History N : 1 MainCategory
-    // 대분류
+    // History N : 1 Category
+    // 카테고리 정보
     @ManyToOne
-    @JoinColumn(name = "main_category_id")
-    private MainCategory mainCategory;
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    // History N : 1 SubCategory
-    // 중분류
-    @ManyToOne
-    @JoinColumn(name = "sub_category_id")
-    private SubCategory subCategory;
-
-    // History N : 1 ThirdCategory
-    // 소분류
-    @ManyToOne
-    @JoinColumn(name = "third_category_id")
-    private ThirdCategory thirdCategory;
-
-    // 진행상태 (default = READY)
+    // 진행상태 (대기중, 처리중, 완료)
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255) default '대기중'")
     private ServiceStatus status = ServiceStatus.대기중;
 
-    // History 1 : N HistorySerial
+    // History 1 : N HistoryDevice
     // 단말기 시리얼번호 목록
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "history")
-    private List<HistorySerial> historySerialList;
+    @JsonIgnoreProperties(value = {"history", "device"}, ignoreUnknown = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "history", orphanRemoval = true)
+    private List<HistoryDevice> historyDeviceList = new ArrayList<>();
 
     // 삭제 여부 (DB 에서는 지워지지 않음)
     @JsonIgnore
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private boolean deleted;
+
+    public void addHistoryDevice(HistoryDevice historyDevice) {
+        this.historyDeviceList.add(historyDevice);
+    }
 
 }

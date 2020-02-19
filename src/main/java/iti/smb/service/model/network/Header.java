@@ -25,16 +25,6 @@ public class Header<T> {
 
     private T data;
 
-    // OK
-    public static <T> Header<T> OK() {
-        return (Header<T>) Header.builder()
-                .transactionTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .resultCode("OK")
-                .description("DELETED")
-                .data("{}")
-                .build();
-    }
-
     // DATA OK
     public static <T> Header<T> OK(T data) {
         return (Header<T>) Header.builder()
@@ -42,6 +32,16 @@ public class Header<T> {
                 .resultCode("OK")
                 .description("OK")
                 .data(data)
+                .build();
+    }
+
+    // OK
+    public static <T> Header<T> DELETE() {
+        return (Header<T>) Header.builder()
+                .transactionTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .resultCode("OK")
+                .description("DELETED")
+                .data("{}")
                 .build();
     }
 

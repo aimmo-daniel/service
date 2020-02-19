@@ -70,10 +70,9 @@ public class HospitalService implements CrudInterface<HospitalReq, HospitalRes, 
                     if(req.getSolution() != null) hospital.setSolution(req.getSolution());
                     if(req.getLink() != null) hospital.setLink(req.getLink());
 
-                    return hospital;
+                    hospitalRepository.save(hospital);
+                    return Header.OK(response(hospital));
                 })
-                .map(newHospital -> hospitalRepository.save(newHospital))
-                .map(updateHospital -> Header.OK(response(updateHospital)))
                 .orElseThrow(HospitalNotFoundException::new);
     }
 
@@ -84,7 +83,7 @@ public class HospitalService implements CrudInterface<HospitalReq, HospitalRes, 
                     hospital.setEndService(true);
                     hospitalRepository.save(hospital);
 
-                    return Header.OK();
+                    return Header.DELETE();
                 })
                 .orElseThrow(HospitalNotFoundException::new);
     }
@@ -102,4 +101,5 @@ public class HospitalService implements CrudInterface<HospitalReq, HospitalRes, 
 
         return response;
     }
+
 }

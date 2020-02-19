@@ -27,7 +27,7 @@ public class Member {
     @Column(name = "name", nullable = false)
     private String name;
 
-    // 직급
+    // 직급 (사장, 본부장, 소장, 팀장, 과장, 대리, 사원, 선임연구원, 연구원)
     @Enumerated(EnumType.STRING)
     @Column(name = "job_position", nullable = false)
     private JobPosition jobPosition;

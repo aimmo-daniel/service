@@ -15,22 +15,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HistoryRepositoryTest {
 
     private MemberRepository memberRepository;
-    private SerialRepository serialRepository;
-    private MainCategoryRepository mainCategoryRepository;
-    private SubCategoryRepository subCategoryRepository;
-    private ThirdCategoryRepository thirdCategoryRepository;
+    private DeviceRepository serialRepository;
     private HospitalRepository hospitalRepository;
     private HistoryRepository historyRepository;
 
     @Autowired
-    HistoryRepositoryTest(MemberRepository memberRepository, SerialRepository serialRepository,
-                          MainCategoryRepository mainCategoryRepository, SubCategoryRepository subCategoryRepository,
-                          ThirdCategoryRepository thirdCategoryRepository, HospitalRepository hospitalRepository, HistoryRepository historyRepository) {
+    HistoryRepositoryTest(MemberRepository memberRepository, DeviceRepository serialRepository,
+                          HospitalRepository hospitalRepository, HistoryRepository historyRepository) {
         this.memberRepository = memberRepository;
         this.serialRepository = serialRepository;
-        this.mainCategoryRepository = mainCategoryRepository;
-        this.subCategoryRepository = subCategoryRepository;
-        this.thirdCategoryRepository = thirdCategoryRepository;
         this.hospitalRepository = hospitalRepository;
         this.historyRepository = historyRepository;
     }
@@ -55,10 +48,6 @@ class HistoryRepositoryTest {
         Member member2 = memberRepository.findById(1L).orElse(null);
         // 병원
         Hospital hospital = hospitalRepository.findByCode("EPSH").orElse(null);
-        // 대분류
-        MainCategory mainCategory = mainCategoryRepository.findById(2L).orElse(null);
-        // 중분류
-        SubCategory subCategory = subCategoryRepository.findById(2L).orElse(null);
 
 
         History history = History.builder()
@@ -70,10 +59,8 @@ class HistoryRepositoryTest {
                 .action("조치사항2")
                 .remarks("특이사항2")
                 .hospital(hospital)
-                .mainCategory(mainCategory)
-                .subCategory(subCategory)
                 .status(ServiceStatus.완료)
-                //.historySerialList()
+                //.historyDeviceList()
                 .build();
 
         History newHistory = historyRepository.save(history);

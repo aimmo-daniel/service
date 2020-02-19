@@ -3,9 +3,6 @@ package iti.smb.service.service;
 import iti.smb.service.exception.HistoryNotFoundException;
 import iti.smb.service.interfaces.CrudInterface;
 import iti.smb.service.model.entity.History;
-import iti.smb.service.model.entity.MainCategory;
-import iti.smb.service.model.entity.SubCategory;
-import iti.smb.service.model.entity.ThirdCategory;
 import iti.smb.service.model.network.Header;
 import iti.smb.service.model.network.request.HistoryReq;
 import iti.smb.service.model.network.response.HistoryRes;
@@ -25,20 +22,15 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
     private final HistoryRepository historyRepository;
     private final HospitalRepository hospitalRepository;
     private final MemberRepository memberRepository;
-    private final MainCategoryRepository mainCategoryRepository;
-    private final SubCategoryRepository subCategoryRepository;
-    private final ThirdCategoryRepository thirdCategoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public HistoryService(HistoryRepository historyRepository, HospitalRepository hospitalRepository,
-                          MemberRepository memberRepository, MainCategoryRepository mainCategoryRepository,
-                          SubCategoryRepository subCategoryRepository, ThirdCategoryRepository thirdCategoryRepository) {
+                          MemberRepository memberRepository, CategoryRepository categoryRepository) {
         this.historyRepository = historyRepository;
         this.hospitalRepository = hospitalRepository;
         this.memberRepository = memberRepository;
-        this.mainCategoryRepository = mainCategoryRepository;
-        this.subCategoryRepository = subCategoryRepository;
-        this.thirdCategoryRepository = thirdCategoryRepository;
+        this.categoryRepository = categoryRepository;
     }
 
 
@@ -52,14 +44,13 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
                 .action(req.getAction())
                 .remarks(req.getRemarks())
                 .status(req.getStatus())
+                .receiveMember(memberRepository.getOne(req.getReceiveMemberId()))
                 .hospital(hospitalRepository.getOne(req.getHospitalId()))
                 .build();
 
-        if(!StringUtils.isEmpty(req.getReceiveMemberId())) history.setReceiveMember(memberRepository.getOne(req.getReceiveMemberId()));
+        // 작업자와 카테고리는 추후 선택
         if(!StringUtils.isEmpty(req.getWorkMemberId())) history.setWorkMember(memberRepository.getOne(req.getWorkMemberId()));
-        //if(!StringUtils.isEmpty(req.getMainCategoryId())) history.setMainCategory(mainCategoryRepository.getOne(req.getMainCategoryId()));
-        if(!StringUtils.isEmpty(req.getSubCategoryId())) history.setSubCategory(subCategoryRepository.getOne(req.getSubCategoryId()));
-        if(!StringUtils.isEmpty(req.getThirdCategoryId())) history.setThirdCategory(thirdCategoryRepository.getOne(req.getThirdCategoryId()));
+        if(!StringUtils.isEmpty(req.getCategoryId())) history.setCategory(categoryRepository.getOne(req.getCategoryId()));
 
         History newHistory = historyRepository.save(history);
 
@@ -101,15 +92,12 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
                     if(!StringUtils.isEmpty(req.getAction())) history.setAction(req.getAction());
                     if(!StringUtils.isEmpty(req.getRemarks())) history.setRemarks(req.getRemarks());
                     if(!StringUtils.isEmpty(req.getHospitalId())) history.setHospital(hospitalRepository.getOne(req.getHospitalId()));
-                    if(!StringUtils.isEmpty(req.getMainCategoryId())) history.setMainCategory(mainCategoryRepository.getOne(req.getMainCategoryId()));
-                    if(!StringUtils.isEmpty(req.getSubCategoryId())) history.setSubCategory(subCategoryRepository.getOne(req.getSubCategoryId()));
-                    if(!StringUtils.isEmpty(req.getThirdCategoryId())) history.setThirdCategory(thirdCategoryRepository.getOne(req.getThirdCategoryId()));
+                    if(!StringUtils.isEmpty(req.getCategoryId())) history.setCategory(categoryRepository.getOne(req.getCategoryId()));
                     if(!StringUtils.isEmpty(req.getStatus())) history.setStatus(req.getStatus());
 
-                    return history;
+                    historyRepository.save(history);
+                    return Header.OK(response(history));
                 })
-                .map(newHistory -> historyRepository.save(newHistory))
-                .map(updateHistory -> Header.OK(response(updateHistory)))
                 .orElseThrow(HistoryNotFoundException::new);
     }
 
@@ -120,7 +108,7 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
                     history.setDeleted(true);
                     historyRepository.save(history);
 
-                    return Header.OK();
+                    return Header.DELETE();
                 })
                 .orElseThrow(HistoryNotFoundException::new);
     }
@@ -137,9 +125,7 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
                 .action(history.getAction())
                 .remarks(history.getRemarks())
                 .hospital(history.getHospital())
-                .mainCategory(history.getMainCategory())
-                .subCategory(history.getSubCategory())
-                .thirdCategory(history.getThirdCategory())
+                .category(history.getCategory())
                 .status(history.getStatus())
                 .build();
 
