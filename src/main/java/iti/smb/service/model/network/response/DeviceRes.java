@@ -1,9 +1,6 @@
 package iti.smb.service.model.network.response;
 
-import iti.smb.service.model.entity.HistoryDevice;
-import iti.smb.service.model.entity.Hospital;
-import iti.smb.service.model.entity.Product;
-import iti.smb.service.model.network.dto.HistoryDeviceDto;
+import iti.smb.service.model.network.dto.ServiceHistoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,10 +18,12 @@ public class DeviceRes {
 
     private String serialNumber;
 
-    private Hospital hospital;
+    private String hospitalCode;
 
-    private Product product;
+    private String hospital;
 
-    private List<HistoryDeviceDto> historyDeviceList;
+    private String product;
+
+    private List<ServiceHistoryDto> serviceHistory;
 
 }

@@ -1,5 +1,6 @@
 package iti.smb.service.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -37,6 +38,11 @@ public class Device {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    // 삭제여부
+    @JsonIgnore
+    @Column(name = "deleted", columnDefinition = "boolean default false")
+    private boolean deleted;
 
     // Device 1 : N HistoryDevice
     @JsonIgnoreProperties(value = {"history", "device"}, ignoreUnknown = true)

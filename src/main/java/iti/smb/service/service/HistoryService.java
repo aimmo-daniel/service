@@ -3,7 +3,10 @@ package iti.smb.service.service;
 import iti.smb.service.exception.HistoryNotFoundException;
 import iti.smb.service.interfaces.CrudInterface;
 import iti.smb.service.model.entity.History;
+import iti.smb.service.model.entity.HistoryDevice;
 import iti.smb.service.model.network.Header;
+import iti.smb.service.model.network.dto.SerialDto;
+import iti.smb.service.model.network.dto.ServiceHistoryDto;
 import iti.smb.service.model.network.request.HistoryReq;
 import iti.smb.service.model.network.response.HistoryRes;
 import iti.smb.service.repository.*;
@@ -23,16 +26,19 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
     private final HospitalRepository hospitalRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final HistoryDeviceRepository historyDeviceRepository;
 
     @Autowired
     public HistoryService(HistoryRepository historyRepository, HospitalRepository hospitalRepository,
-                          MemberRepository memberRepository, CategoryRepository categoryRepository) {
+                          MemberRepository memberRepository, CategoryRepository categoryRepository, HistoryDeviceRepository historyDeviceRepository) {
         this.historyRepository = historyRepository;
         this.hospitalRepository = hospitalRepository;
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
+        this.historyDeviceRepository = historyDeviceRepository;
     }
 
+    // TODO : Create, Update만 하면 완료
 
     @Override
     public Header<HistoryRes> create(HistoryReq req) {
@@ -54,15 +60,12 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
 
         History newHistory = historyRepository.save(history);
 
-        // TODO : Insert는 되는데 response() 메소드 실행시 오류남
-
         return Header.OK(response(newHistory));
     }
 
     @Override
     public Header<List<HistoryRes>> list() {
         List<History> historyList = historyRepository.findByDeletedFalse();
-
         List<HistoryRes> historyResList = new ArrayList<>();
 
         for (History history : historyList) {
@@ -114,20 +117,40 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
     }
 
     private HistoryRes response(History history) {
+
+        List<HistoryDevice> historyDeviceList = historyDeviceRepository.findByHistoryId(history.getId());
+        List<SerialDto> serialDtoList = new ArrayList<>();
+
+        for (HistoryDevice device : historyDeviceList) {
+            SerialDto serialDto = new SerialDto();
+            if(!StringUtils.isEmpty(device.getDevice())) {
+                serialDto.setId(device.getDevice().getId());
+                serialDto.setProduct(device.getDevice().getProduct().getName());
+                serialDto.setSerialNumber(device.getDevice().getSerialNumber());
+            }
+
+            serialDtoList.add(serialDto);
+        }
+
         HistoryRes response = HistoryRes.builder()
                 .id(history.getId())
                 .receiveDate(history.getReceiveDate())
                 .endDate(history.getEndDate())
-                .receiveMember(history.getReceiveMember())
-                .workMember(history.getWorkMember())
                 .reception(history.getReception())
                 .cause(history.getCause())
                 .action(history.getAction())
                 .remarks(history.getRemarks())
-                .hospital(history.getHospital())
-                .category(history.getCategory())
                 .status(history.getStatus())
+                .serialList(serialDtoList)
                 .build();
+
+        if(!StringUtils.isEmpty(history.getReceiveMember())) response.setReceiveMember(history.getReceiveMember().getName());
+        if(!StringUtils.isEmpty(history.getWorkMember())) response.setWorkMember(history.getWorkMember().getName());
+        if(!StringUtils.isEmpty(history.getHospital())){
+            response.setHospitalCode(history.getHospital().getCode());
+            response.setHospital(history.getHospital().getName());
+        }
+        if(!StringUtils.isEmpty(history.getCategory())) response.setCategory(history.getCategory().getName());
 
         return response;
     }

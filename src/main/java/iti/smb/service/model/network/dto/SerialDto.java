@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HistoryDeviceDto {
+public class SerialDto {
 
-    private Long historyId;
+    private Long id;
 
-    private Long deviceId;
+    private String product;
+
+    private String serialNumber;
 
 }
