@@ -33,20 +33,4 @@ public class HistoryDevice {
     @JoinColumn(name = "device_id")
     private Device device;
 
-    public void setHistory(History history) {
-        if (this.history != null) {
-            this.history.getHistoryDeviceList().remove(this);
-        }
-        this.history = history;
-        history.getHistoryDeviceList().add(this);
-    }
-
-    public void setDevice(Device device) {
-        if (this.device != null) {
-            this.device.getHistoryDeviceList().remove(this);
-        }
-        this.device = device;
-        device.getHistoryDeviceList().add(this);
-    }
-
 }

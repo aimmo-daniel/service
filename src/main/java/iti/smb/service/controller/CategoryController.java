@@ -5,6 +5,7 @@ import iti.smb.service.model.network.Header;
 import iti.smb.service.model.network.request.CategoryReq;
 import iti.smb.service.model.network.response.CategoryRes;
 import iti.smb.service.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
