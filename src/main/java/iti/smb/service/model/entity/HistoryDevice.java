@@ -33,4 +33,11 @@ public class HistoryDevice {
     @JoinColumn(name = "device_id")
     private Device device;
 
+    public static HistoryDevice of(History history, Device device) {
+        HistoryDevice historyDevice = new HistoryDevice();
+        historyDevice.setHistory(history);
+        historyDevice.setDevice(device);
+        return historyDevice;
+    }
+
 }

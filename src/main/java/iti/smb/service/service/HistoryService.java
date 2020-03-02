@@ -69,10 +69,7 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
             for (String serial : serialNumberList) {
                 Device device = deviceRepository.findBySerialNumber(serial).orElseThrow(SerialNotFoundException::new);
 
-                HistoryDevice historyDevice = HistoryDevice.builder()
-                        .device(device)
-                        .history(newHistory)
-                        .build();
+                HistoryDevice historyDevice = HistoryDevice.of(history, device);
 
                 historyDeviceRepository.save(historyDevice);
             }
@@ -129,10 +126,7 @@ public class HistoryService implements CrudInterface<HistoryReq, HistoryRes, Lon
                         for (String serial : serialNumberList) {
                             Device device = deviceRepository.findBySerialNumber(serial).orElseThrow(SerialNotFoundException::new);
 
-                            HistoryDevice historyDevice = HistoryDevice.builder()
-                                    .device(device)
-                                    .history(history)
-                                    .build();
+                            HistoryDevice historyDevice = HistoryDevice.of(history, device);
 
                             historyDeviceRepository.save(historyDevice);
                         }

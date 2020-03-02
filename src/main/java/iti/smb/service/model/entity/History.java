@@ -92,7 +92,10 @@ public class History {
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private boolean deleted;
 
-    public void addHistoryDevice(HistoryDevice historyDevice) {
+    public void addHistoryDevice(History history, Device device) {
+        HistoryDevice historyDevice = new HistoryDevice();
+        historyDevice.setHistory(history);
+        historyDevice.setDevice(device);
         this.historyDeviceList.add(historyDevice);
     }
 
